@@ -106,7 +106,8 @@
 <h3>Insira os Dados da Proposta</h3>
 <textarea id="general-input" placeholder="Digite o briefing geral da proposta..."></textarea>
 <button onclick="sendGeneralInput()">Enviar para o Agente</button>
-
+<input id="client-name" placeholder="Nome do Cliente">
+<input id="project-name" placeholder="Nome do Projeto">
 <div class="organized-section" data-section="Client Stated Needs">
     <h4>Client Stated Needs <span class="status pending">Pendente</span></h4>
     <p id="clientNeeds">Aguardando entrada...</p>
@@ -136,10 +137,18 @@
     <h4>Corresponding Solution Components <span class="status pending">Pendente</span></h4>
     <p id="solutionComponents">Aguardando entrada...</p>
     <button class="regenerate-btn" onclick="regenerateSection('Corresponding Solution Components')">🔄 Regerar</button>
+    <br/>
 </div>
 <!-- Adicione após as seções -->
 <button id="generate-slide-btn" onclick="generateSlide()">🖼️ Gerar Slide</button>
 <div id="slide-preview"></div>
+<button onclick="prevSlide()">⬅️ Anterior</button>
+<button onclick="nextSlide()">➡️ Próximo</button>
+<button onclick="saveCurrentSlide()">💾 Salvar Slide</button>
+<button onclick="showHistory()">📜 Ver Histórico</button>
+<div id="slide-history" style="display:none; background:#fff; border:1px solid #ccc; padding:10px; margin-top:10px;"></div>
+
+
 </div>
 </div>
  
@@ -153,6 +162,8 @@
             "Client Value Objectives",
             "Corresponding Solution Components"
         ];
+        let slides = [];
+        let currentSlide = 0;
 
         async function sendGeneralInput() {
             const generalInput = document.getElementById('general-input').value.trim();
@@ -269,6 +280,11 @@
             }
         }
         
+        function showSlide(index) {
+            const preview = document.getElementById('slide-preview');
+            preview.innerHTML = slides[index] || "<em>Nenhum slide gerado ainda.</em>";
+        }
+
         async function generateSlide() {
             // Coleta os textos das seções
             const slideData = {};
@@ -291,10 +307,61 @@
 
                 const data = await response.json();
                 // Exibe o slide gerado (HTML ou imagem)
-                document.getElementById('slide-preview').innerHTML = data.slide_html || "<em>Slide gerado!</em>";
+                slides.push(data.slide_html);
+                currentSlide = slides.length - 1;
+                showSlide(currentSlide);
+
+                // Salva no backend
+                await fetch('http://localhost:8000/save-slide', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_name: document.getElementById('client-name').value,
+                        project_name: document.getElementById('project-name').value,
+                        slide_html: data.slide_html
+                    }),
+                });
             } catch (error) {
                 document.getElementById('slide-preview').innerHTML = "Erro ao gerar slide.";
             }
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        async function saveCurrentSlide() {
+            if (!slides[currentSlide]) return;
+            await fetch('http://localhost:8000/save-slide', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    client_name: document.getElementById('client-name').value,
+                    project_name: document.getElementById('project-name').value,
+                    slide_html: slides[currentSlide]
+                }),
+            });
+            alert("Slide salvo!");
+        }
+
+        async function showHistory() {
+            const client = document.getElementById('client-name').value;
+            const project = document.getElementById('project-name').value;
+            const response = await fetch(`http://localhost:8000/get-slides?client_name=${encodeURIComponent(client)}&project_name=${encodeURIComponent(project)}`);
+            const data = await response.json();
+            const historyDiv = document.getElementById('slide-history');
+            historyDiv.innerHTML = "<h4>Histórico de Slides</h4>" + (data.slides.length ? data.slides.map((s, i) => `<div><b>Slide ${i+1}</b><div>${s}</div></div>`).join("<hr>") : "<em>Nenhum slide salvo.</em>");
+            historyDiv.style.display = "block";
         }
 
         document.querySelector('textarea').addEventListener('keypress', (e) => {
@@ -304,6 +371,23 @@
             }
         });
 
+        function autoFillClientAndProject() {
+            const text = document.getElementById('general-input').value;
+            // Exemplo: busca por "Client Name:" e "Opportunity Name:"
+            const clientMatch = text.match(/Client Name:\\s*(.+)/i);
+            const projectMatch = text.match(/Opportunity Name:\\s*(.+)/i);
+
+            if (clientMatch) {
+                document.getElementById('client-name').value = clientMatch[1].trim();
+            }
+            if (projectMatch) {
+                document.getElementById('project-name').value = projectMatch[1].trim();
+            }
+        }
+
+        // Chame ao colar ou ao perder foco do textarea
+        document.getElementById('general-input').addEventListener('input', autoFillClientAndProject);
+        document.getElementById('general-input').addEventListener('blur', autoFillClientAndProject);
 </script>
 </body>
 </html>

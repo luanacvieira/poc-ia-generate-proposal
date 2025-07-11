@@ -5,6 +5,7 @@ import os
 from pydantic import BaseModel
 import re
 from dotenv import load_dotenv
+from fastapi import Request, Body
 
 load_dotenv()
 app = FastAPI()
@@ -229,6 +230,59 @@ async def generate_section(request: PromptRequest):
         "refined_text": refined_text,
         "prompt": prompt
     }
+
+@app.post("/generate-slide")
+async def generate_slide(request: Request):
+    data = await request.json()
+    slide_html = f"""
+    <div style='border:2px solid orange;padding:20px;font-family:sans-serif;background:#fff;'>
+        <h3 style='color:#e67e22;'>Alignment to Buyer Value</h3>
+        <table style='width:100%;border-collapse:collapse;'>
+            <tr>
+                <td style='vertical-align:top;width:50%;border:1px solid #e67e22;padding:10px;'>
+                    <strong>Client Stated Needs:</strong><br>{data.get('Client Stated Needs', '')}
+                    <br><br>
+                    <strong>Corresponding Strategic Objectives:</strong><br>{data.get('Corresponding Strategic Objectives', '')}
+                </td>
+                <td style='vertical-align:top;width:50%;border:1px solid #e67e22;padding:10px;'>
+                    <strong>Key Issues and Problems:</strong><br>{data.get('Key Issues and Problems', '')}
+                    <br><br>
+                    <strong>Opportunities:</strong><br>{data.get('Opportunities', '')}
+                </td>
+            </tr>
+            <tr>
+                <td style='vertical-align:top;width:50%;border:1px solid #e67e22;padding:10px;'>
+                    <strong>Client value objectives</strong><br>{data.get('Client Value Objectives', '')}
+                </td>
+                <td style='vertical-align:top;width:50%;border:1px solid #e67e22;padding:10px;'>
+                    <strong>Corresponding solution components</strong><br>{data.get('Corresponding Solution Components', '')}
+                </td>
+            </tr>
+        </table>
+        <div style='font-size:10px;color:#e67e22;margin-top:10px;'>©2020 Avanade Inc. All Rights Reserved.</div>
+    </div>
+    """
+    return {"slide_html": slide_html}
+
+slides_db = {}
+
+@app.post("/save-slide")
+async def save_slide(
+    client_name: str = Body(...),
+    project_name: str = Body(...),
+    slide_html: str = Body(...)
+):
+    key = f"{client_name}_{project_name}"
+    slides_db[key] = slide_html
+    return {"status": "saved", "key": key}
+
+@app.get("/get-slides")
+async def get_slides(client_name: str, project_name: str):
+    key = f"{client_name}_{project_name}"
+    slides = []
+    if key in slides_db:
+        slides.append(slides_db[key])
+    return {"slides": slides}
 
 def clean_code_blocks(text):
     # Remove blocos markdown ```html ... ``` ou ``` ... ```
