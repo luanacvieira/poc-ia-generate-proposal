@@ -137,6 +137,9 @@
     <p id="solutionComponents">Aguardando entrada...</p>
     <button class="regenerate-btn" onclick="regenerateSection('Corresponding Solution Components')">🔄 Regerar</button>
 </div>
+<!-- Adicione após as seções -->
+<button id="generate-slide-btn" onclick="generateSlide()">🖼️ Gerar Slide</button>
+<div id="slide-preview"></div>
 </div>
 </div>
  
@@ -266,6 +269,34 @@
             }
         }
         
+        async function generateSlide() {
+            // Coleta os textos das seções
+            const slideData = {};
+            sections.forEach(section => {
+                const sectionDiv = document.querySelector(`.organized-section[data-section="${section}"]`);
+                const contentP = sectionDiv.querySelector('p');
+                slideData[section] = contentP.innerHTML;
+            });
+
+            try {
+                const response = await fetch('http://localhost:8000/generate-slide', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(slideData),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ao gerar slide: ${response.status}`);
+                }
+
+                const data = await response.json();
+                // Exibe o slide gerado (HTML ou imagem)
+                document.getElementById('slide-preview').innerHTML = data.slide_html || "<em>Slide gerado!</em>";
+            } catch (error) {
+                document.getElementById('slide-preview').innerHTML = "Erro ao gerar slide.";
+            }
+        }
+
         document.querySelector('textarea').addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();

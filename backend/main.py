@@ -4,17 +4,17 @@ import openai
 import os
 from pydantic import BaseModel
 import re
+from dotenv import load_dotenv
 
+load_dotenv()
 app = FastAPI()
  
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins= ["http://localhost:5500", "http://127.0.0.1:5500"],  # coloque exatamente a origem que está acessando o backend
+    allow_origins= ["*"],  # coloque exatamente a origem que está acessando o backend
     allow_credentials=True,
     allow_methods=["*"],
-
-
     allow_headers=["*"],
 )
  
@@ -140,42 +140,72 @@ async def generate_all_sections(request: BriefingRequest):
 @app.post("/generate-section")
 async def generate_section(request: PromptRequest):
     section_prompts = {
-        "Client Stated Needs": (
+            "Client Stated Needs": (
             "Você é um assistente de IA especializado em propostas comerciais.\n"
             f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção '{request.section}'.\n"
+            " Esse texto deve serfeito baseado nesse briefing fazendo levantamento das Necessidades declaradas pelo cliente"
+            "Para ajudar entender a estrutura do texto que deve xer criado, aqui um exemplo de 3 topicos criados para apresentar as necessidades declaradas de um cliente aleatorio:"
+            "1. Transformar a organização por meio da tecnologia de IA generativa."
+            "2. Melhorar a eficiência operacional e a experiência dos funcionários e clientes."
+            "3. Lançar novos produtos e serviços com tempo de lançamento no mercado reduzido."
             "Liste claramente as necessidades declaradas pelo cliente com base no briefing abaixo. "
             "Responda em até 3 tópicos objetivos, estruturados e claros, em HTML (use <ul><li>)."
         ),
         "Corresponding Strategic Objectives": (
             "Você é um assistente de IA especializado em propostas comerciais.\n"
             f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção '{request.section}'.\n"
-            "Com base no briefing, identifique os objetivos estratégicos correspondentes do cliente. "
+            " Esse texto deve ser feito baseado nesse briefing fazendo levantamento dos Objetivos Estratégicos declarados pelo cliente"
+            "Para ajudar entender a estrutura do texto que deve xer criado, aqui um exemplo de 3 topicos criados para apresentar as necessidades declaradas de um cliente aleatorio:"
+            "1. Aumente a eficiência operacional com a automação orientada por IA."
+            "2. Aumente o engajamento de funcionários e clientes com soluções personalizadas."
+            "3. Acelere a inovação de produtos e serviços integrando IA aos fluxos de trabalho."
+            "Com base no briefing, identifique e Liste claramente os objetivos estratégicos correspondentes do cliente. "
             "Responda em até 3 tópicos objetivos, estruturados e claros, em HTML (use <ul><li>)."
         ),
         "Key Issues and Problems": (
             "Você é um assistente de IA especializado em propostas comerciais.\n"
             f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção '{request.section}'.\n"
+            " Esse texto deve serfeito baseado nesse briefing fazendo levantamento dos Principais problemas e questões declarados pelo cliente"
+            "Para ajudar entender a estrutura do texto que deve xer criado, aqui um exemplo de 3 topicos criados para apresentar as problemas e questões declarados por um cliente aleatorio:"
+            "1. Falta de escalabilidade para lidar com grandes volumes de interações de IA."
+            "2. Complexidades de integração entre sistemas e modelos de IA."
+            "3. Flexibilidade limitada na personalização de soluções de IA para necessidades comerciais específicas."
             "Aponte os principais problemas e desafios enfrentados pelo cliente, conforme o briefing. "
             "Responda em até 3 tópicos objetivos, estruturados e claros, em HTML (use <ul><li>)."
         ),
         "Opportunities": (
             "Você é um assistente de IA especializado em propostas comerciais.\n"
             f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção '{request.section}'.\n"
+            "Esse texto deve ser feito baseado nesse briefing fazendo levantamento dos Principais oportunidades de projeto com o cliente"
+            "Para ajudar entender a estrutura do texto que deve xer criado, aqui um exemplo de 3 topicos criados para apresentar as oportunidades levantadas ou declaradas de um cliente aleatorio:"
+            "1. Implemente uma plataforma de IA escalável para lidar com o crescimento futuro."
+            "2. Use o suporte a vários modelos para uma integração perfeita com diversas soluções de IA."
+            "3. Crie uma plataforma flexível e de baixo código para personalizar fluxos de trabalho rapidamente."
             "Identifique oportunidades relevantes para o cliente a partir do briefing. "
             "Responda em até 3 tópicos objetivos, estruturados e claros, em HTML (use <ul><li>)."
         ),
         "Client Value Objectives": (
             "Você é um assistente de IA especializado em propostas comerciais.\n"
             f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção '{request.section}'.\n"
+            "Esse texto deve ser feito baseado nesse briefing fazendo levantamento dos Principais Objetivos de valor para o cliente"
+            "Para ajudar entender a estrutura do texto que deve ser criado, aqui um exemplo de 3 topicos criados para apresentar as os Principais Objetivos de valor para o cliente levantadas ou declaradas de um cliente aleatorio:"
+            "1. Alcance um desempenho operacional aprimorado com processos baseados em IA. ​"
+            "2. Garanta a rápida implantação de novos modelos e soluções de IA. ​"
+            "3. Capacite o negócio com uma plataforma personalizável e segura."
             "Descreva os objetivos de valor que o cliente espera alcançar, conforme o briefing. "
             "Responda em até 3 tópicos objetivos, estruturados e claros, em HTML (use <ul><li>)."
         ),
         "Corresponding Solution Components": (
             "Você é um assistente de IA especializado em propostas comerciais.\n"
             f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção '{request.section}'.\n"
+            "Esse texto deve ser feito baseado nesse briefing fazendo levantamento dos Componentes da solução correspondentes"
+            "Para ajudar entender a estrutura do texto que deve ser criado, aqui um exemplo de 3 topicos criados para apresentar as os Principais Objetivos de valor para o cliente levantadas ou declaradas de um cliente aleatorio:"
+            "Infraestrutura de nuvem escalável usando o Azure."
+            "Compatibilidade com vários modelos, incluindo o Azure OpenAI e outros modelos."
+            "Plataforma de baixo código para personalização e testes rápidos de casos de uso de IA."
             "Sugira componentes de solução que atendam ao briefing do cliente. "
             "Responda em até 3 tópicos objetivos, estruturados e claros, em HTML (use <ul><li>)."
-        ),
+        )
     }
 
     prompt = (
