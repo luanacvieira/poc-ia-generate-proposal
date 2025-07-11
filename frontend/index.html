@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Proposal Assistant</title>
+<style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 300px;
+            background: #2c2c32;
+            color: #d0d0d0;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .sidebar h2 {
+            color: #0078d4;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .agent-message {
+            background: #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            position: relative;
+        }
+        .agent-message::before {
+            content: '🤖';
+            position: absolute;
+            left: -25px;
+            top: 5px;
+            font-size: 1.2em;
+        }
+        .input-area {
+            flex-grow: 1;
+            padding: 20px;
+            background: #fff;
+            overflow-y: auto;
+        }
+        .input-area h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+        button {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #005bb5;
+        }
+        .organized-section {
+            background: #e9ecef;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 4px solid #0078d4;
+            border-radius: 5px;
+            position: relative;
+        }
+        .status {
+            font-size: 0.7em;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+        .status.pending { background: #ff6f61; }
+        .status.completed { background: #4caf50; }
+        .loading {
+            font-style: italic;
+            color: #666;
+        }
+</style>
+</head>
+<body>
+<div class="sidebar">
+<h2>AI Agent Chat</h2>
+<div class="agent-message" id="message-0">Olá! Por favor, forneça o título da proposta.</div>
+<!-- More messages will be added dynamically -->
+</div>
+<div class="input-area">
+
+
+<h3>Insira os Dados da Proposta</h3>
+<textarea id="general-input" placeholder="Digite o briefing geral da proposta..."></textarea>
+<button onclick="sendGeneralInput()">Enviar para o Agente</button>
+
+<div class="organized-section" data-section="Client Stated Needs">
+    <h4>Client Stated Needs <span class="status pending">Pendente</span></h4>
+    <p id="clientNeeds">Aguardando entrada...</p>
+    <button class="regenerate-btn" onclick="regenerateSection('Client Stated Needs')">🔄 Regerar</button>
+</div>
+<div class="organized-section" data-section="Corresponding Strategic Objectives">
+    <h4>Corresponding Strategic Objectives <span class="status pending">Pendente</span></h4>
+    <p id="strategicObjectives">Aguardando entrada...</p>
+    <button class="regenerate-btn" onclick="regenerateSection('Corresponding Strategic Objectives')">🔄 Regerar</button>
+</div>
+<div class="organized-section" data-section="Key Issues and Problems">
+    <h4>Key Issues and Problems <span class="status pending">Pendente</span></h4>
+    <p id="keyIssues">Aguardando entrada...</p>
+    <button class="regenerate-btn" onclick="regenerateSection('Key Issues and Problems')">🔄 Regerar</button>
+</div>
+<div class="organized-section" data-section="Opportunities">
+    <h4>Opportunities <span class="status pending">Pendente</span></h4>
+    <p id="opportunities">Aguardando entrada...</p>
+    <button class="regenerate-btn" onclick="regenerateSection('Opportunities')">🔄 Regerar</button>
+</div>
+<div class="organized-section" data-section="Client Value Objectives">
+    <h4>Client Value Objectives <span class="status pending">Pendente</span></h4>
+    <p id="clientValueObjectives">Aguardando entrada...</p>
+    <button class="regenerate-btn" onclick="regenerateSection('Client Value Objectives')">🔄 Regerar</button>
+</div>
+<div class="organized-section" data-section="Corresponding Solution Components">
+    <h4>Corresponding Solution Components <span class="status pending">Pendente</span></h4>
+    <p id="solutionComponents">Aguardando entrada...</p>
+    <button class="regenerate-btn" onclick="regenerateSection('Corresponding Solution Components')">🔄 Regerar</button>
+</div>
+</div>
+</div>
+ 
+<script>
+        let dataIndex = 0;
+        const sections = [
+            "Client Stated Needs",
+            "Corresponding Strategic Objectives",
+            "Key Issues and Problems",
+            "Opportunities",
+            "Client Value Objectives",
+            "Corresponding Solution Components"
+        ];
+
+        async function sendGeneralInput() {
+            const generalInput = document.getElementById('general-input').value.trim();
+            if (!generalInput) {
+                alert("Por favor, digite o briefing geral da proposta.");
+                return;
+            }
+
+            // Atualiza status para "Processando" em todas as seções
+            sections.forEach(section => {
+                const sectionDiv = document.querySelector(`.organized-section[data-section="${section}"]`);
+                const contentP = sectionDiv.querySelector('p');
+                const statusSpan = sectionDiv.querySelector('.status');
+                contentP.textContent = "Processando...";
+                statusSpan.textContent = "Processando";
+                statusSpan.classList.remove('pending', 'completed');
+                statusSpan.classList.add('pending');
+            });
+
+            try {
+                const response = await fetch('http://localhost:8000/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ briefing: generalInput }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro na resposta: ${response.status}`);
+                }
+
+                const data = await response.json();
+                // data é um objeto: { "Client Stated Needs": "...", ... }
+
+                sections.forEach(section => {
+                    const sectionDiv = document.querySelector(`.organized-section[data-section="${section}"]`);
+                    const contentP = sectionDiv.querySelector('p');
+                    const statusSpan = sectionDiv.querySelector('.status');
+                    const promptDesc = data[`${section}_prompt`] || "";
+
+                    if (data[section]) {
+                        //contentP.textContent = data[section];
+                        //contentP.innerHTML = `<strong>PROMPT:</strong> ${promptDesc}<br/><br/>${data[section]}`;
+                        contentP.innerHTML = `${data[section]}`;
+                        statusSpan.textContent = "Concluído";
+                        statusSpan.classList.remove('pending');
+                        statusSpan.classList.add('completed');
+                    } else {
+                        contentP.textContent = "Sem conteúdo gerado para essa seção.";
+                        statusSpan.textContent = "Pendente";
+                        statusSpan.classList.remove('completed');
+                        statusSpan.classList.add('pending');
+                    }
+                });
+
+            } catch (error) {
+                alert("Erro ao processar a solicitação: " + error.message);
+                // Reverte status para pendente
+                sections.forEach(section => {
+                    const sectionDiv = document.querySelector(`.organized-section[data-section="${section}"]`);
+                    const contentP = sectionDiv.querySelector('p');
+                    const statusSpan = sectionDiv.querySelector('.status');
+                    contentP.textContent = "Aguardando entrada...";
+                    statusSpan.textContent = "Pendente";
+                    statusSpan.classList.remove('completed');
+                    statusSpan.classList.add('pending');
+                });
+            }
+        }
+        
+        async function regenerateSection(section) {
+            const generalInput = document.getElementById('general-input').value.trim();
+            if (!generalInput) {
+                alert("Por favor, digite o briefing geral da proposta para regerar a seção.");
+                return;
+            }
+            const sectionDiv = document.querySelector(`.organized-section[data-section="${section}"]`);
+            const contentP = sectionDiv.querySelector('p');
+            const statusSpan = sectionDiv.querySelector('.status');
+            contentP.textContent = "Processando...";
+            statusSpan.textContent = "Processando";
+            statusSpan.classList.remove('pending', 'completed');
+            statusSpan.classList.add('pending');
+
+            try {
+                const response = await fetch('http://localhost:8000/generate-section', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ section: section, content: generalInput }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro na resposta: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const promptDesc = data.prompt || "";
+                if (data.refined_text) {
+                    //contentP.innerHTML = `<strong>PROMPT:</strong> ${promptDesc}<br/><br/>${data.refined_text}`;
+                    contentP.innerHTML = `${data.refined_text}`;
+                    statusSpan.textContent = "Concluído";
+                    statusSpan.classList.remove('pending');
+                    statusSpan.classList.add('completed');
+                } else {
+                    contentP.textContent = "Sem conteúdo gerado para essa seção.";
+                    statusSpan.textContent = "Pendente";
+                    statusSpan.classList.remove('completed');
+                    statusSpan.classList.add('pending');
+                }
+            } catch (error) {
+                contentP.textContent = "Erro ao processar.";
+                statusSpan.textContent = "Pendente";
+                statusSpan.classList.remove('completed');
+                statusSpan.classList.add('pending');
+            }
+        }
+        
+        document.querySelector('textarea').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendGeneralInput();
+            }
+        });
+
+</script>
+</body>
+</html>

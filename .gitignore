@@ -1,0 +1,200 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environment
+venv/
+.env/
+.envrc
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# VSCode
+.vscode/
+.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node/npm (caso use para frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build artifacts (caso use)
+dist/
+build/
+*.map
+
+# IDEs
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Test/coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# FastAPI/Starlette
+instance/
+*.db
+*.sqlite3
+
+# Misc
+*.bak
+*.swp
+=======
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environment
+venv/
+.env/
+.envrc
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# VSCode
+.vscode/
+.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node/npm (caso use para frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build artifacts (caso use)
+dist/
+build/
+*.map
+
+# IDEs
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Test/coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# FastAPI/Starlette
+instance/
+*.db
+*.sqlite3
+
+# Misc
+*.bak
+*.swp
+<<<<<<< HEAD
+>>>>>>> 8a0b42f (Add files via upload)
+=======
+>>>>>>> 8a0b42f8344f42164055d1298a6befdf6aeacc21
+.env
+>>>>>>> 55e7474 (Revisando gitignore add env)
+=======
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environment
+venv/
+.env/
+.envrc
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# VSCode
+.vscode/
+.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node/npm (caso use para frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build artifacts (caso use)
+dist/
+build/
+*.map
+
+# IDEs
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Test/coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# FastAPI/Starlette
+instance/
+*.db
+*.sqlite3
+
+# Misc
+*.bak
+*.swp
+>>>>>>> 8a0b42f8344f42164055d1298a6befdf6aeacc21
