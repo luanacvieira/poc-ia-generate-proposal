@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # poc-ia-generate-proposal
 # Projeto Backend/Frontend
 Este projeto contém:
@@ -45,6 +46,9 @@ O histórico dos arquivos lidos aparecerá em uma tabela.
 O backend deve estar rodando em http://localhost:8000.
 O histórico é salvo no arquivo history.json.
 Se quiser limpar o histórico, apague o conteúdo desse arquivo (deixe como []).
+=======
+# poc-ia-generate-proposal
+>>>>>>> 8a0b42f8344f42164055d1298a6befdf6aeacc21
 =======
 # poc-ia-generate-proposal
 >>>>>>> 8a0b42f8344f42164055d1298a6befdf6aeacc21
