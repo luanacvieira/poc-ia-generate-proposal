@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Core Areas of Responsibility</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 960px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        button {
+            background-color: #0078D4;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #005a9e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #0078D4;
+            color: white;
+        }
+        .back-button {
+            margin-bottom: 20px;
+            display: inline-block;
+            background-color: #ccc;
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .back-button:hover {
+            background-color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="solution_price.html" class="back-button">← Voltar</a>
+        <h2>Core Areas of Responsibility</h2>
+        <textarea id="briefingInput" placeholder="Cole aqui o conteúdo para gerar a tabela..."></textarea>
+        <button onclick="gerarTabela()">Gerar Tabela</button>
+        <div id="tabelaResultado"></div>
+    </div>
+
+    <script>
+        async function gerarTabela() {
+            const briefing = document.getElementById("briefingInput").value;
+
+            const response = await fetch("http://localhost:8000/generate-section", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    section: "Core Areas of Responsibility",
+                    content: briefing
+                })
+            });
+
+            const data = await response.json();
+            document.getElementById("tabelaResultado").innerHTML = data.refined_text;
+        }
+    </script>
+</body>
+</html>

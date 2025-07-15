@@ -217,7 +217,27 @@ async def generate_section(request: PromptRequest):
             f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Price-to-Win'.\n"
             "Liste 3 bullets objetivos e claros sobre estratégias de preço para vencer, como modelo Time & Materials, escopo focado e modelo pay-per-service. Responda em HTML (use <ul><li>)."
         ),
-    }
+        "Core Areas of Responsibility": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie uma tabela para a seção 'Core Areas of Responsibility', gere uma tabela HTML com o máximo de conteúdo possível, de preferencia com minimo de 10 linhas geradas na tabela, com conteudo estruturado e alinhado, com as seguintes colunas:\n"
+            "- Track / Workstream\n"
+            "- Accountability (com subcolunas: Client e Avanade, marcadas com 'X' quando aplicável)\n"
+            "- Key notes (scope, dependencies, work plan, AVA/Client third parties)\n\n"
+            "Use o seguinte exemplo como referência de estrutura e estilo da tabela:\n\n"
+            "| Track / Workstream                        | Client | Avanade | Key notes (scope, dependencies, work plan, AVA/Client third parties) |\n"
+            "|-------------------------------------------|--------|---------|------------------------------------------------------------------------|\n"
+            "| Project Kickoff & Alignment               |   X    |    X    | Define project goals, objectives, expectations, and working model.     |\n"
+            "| Use Case Prioritization                   |   X    |         | Co-create and approve the initial backlog of GenAI opportunities aligned to business priorities. |\n"
+            "| AI Literacy Enablement                    |        |    X    | Client provides audience and engagement; Avanade delivers workshops and hands-on sessions. |\n"
+            "| GenAI Squad Setup                         |        |    X    | Define team composition, roles, and onboarding for case development execution. |\n"
+            "| Accelerator Deployment                    |        |    X    | Configure and deploy Avanade’s GenAI accelerator in the client’s environment or as a managed service. |\n"
+            "| Security & Compliance Review              |   X    |    X    | Ensure GenAI usage complies with client’s internal governance, data privacy, and legal requirements. |\n"
+            "| Use Case Implementation (PoC/MVP)         |        |    X    | Deliver prioritized use cases with agile cycles and value demonstration checkpoints. |\n"
+            "| Knowledge Transfer & Sustainability Plan  |   X    |    X    | Empower client teams to maintain, scale, and govern AI solutions independently over time. |\n\n"
+            "A tabela gerada deve ser nova a cada requisição, limpando layout anterior.\n"
+            "A resposta deve estar formatada em HTML usando <table>, <thead>, <tbody>, <tr>, <th> e <td>. Não inclua explicações fora da tabela."
+        ),
+ }
 
     prompt = (
         f"{section_prompts[request.section]}\n\nBriefing do cliente:\n'''{request.content}'''\n"
