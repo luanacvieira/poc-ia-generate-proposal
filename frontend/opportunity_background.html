@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Opportunity Background - Win Themes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 960px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        button {
+            background-color: #0078D4;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+        button:hover {
+            background-color: #005a9e;
+        }
+        .section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        .section h4 {
+            margin-top: 0;
+            color: #0078D4;
+        }
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #0078D4;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #e6f0fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="solution_price.html" class="back-button">← Voltar</a>
+        <h2>Opportunity Background - Win Themes</h2>
+
+        <textarea id="briefingInput" placeholder="Insira o briefing aqui..."></textarea>
+        <button onclick="gerarTabela()">Gerar Tabela</button>
+
+        <div class="section">
+            <h4>Exemplo de Tabela</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Theme</th>
+                        <th>Evidence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Expertise in Generative AI</td>
+                        <td>Successfully delivered similar Generative AI projects for major clients.</td>
+                    </tr>
+                    <tr>
+                        <td>Scalable AI Platform</td>
+                        <td>Proven architecture supporting multi-model AI deployments on Azure.</td>
+                    </tr>
+                    <tr>
+                        <td>Accelerated Time-to-Value</td>
+                        <td>Use of pre-built AI accelerators and reusable assets enabled faster deployment of use cases.</td>
+                    </tr>
+                    <tr>
+                        <td>Governance &amp; Responsible AI</td>
+                        <td>Established frameworks for ethical AI, privacy compliance, and lifecycle monitoring.</td>
+                    </tr>
+                    <tr>
+                        <td>Client Empowerment &amp; Sustainability</td>
+                        <td>AI Literacy programs and CoE models delivered to enable client autonomy and scale.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h4>Tabela Gerada</h4>
+            <div id="tabelaOutput"></div>
+        </div>
+    </div>
+
+    <script>
+        async function gerarTabela() {
+            const briefing = document.getElementById("briefingInput").value;
+
+            const response = await fetch("http://localhost:8000/generate-section", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    section: "Opportunity Background - Win Themes",
+                    content: briefing
+                })
+            });
+
+            const data = await response.json();
+            document.getElementById("tabelaOutput").innerHTML = data.refined_text;
+        }
+    </script>
+</body>
+</html>

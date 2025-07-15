@@ -223,7 +223,7 @@ async def generate_section(request: PromptRequest):
             "- Track / Workstream\n"
             "- Accountability (com subcolunas: Client e Avanade, marcadas com 'X' quando aplicável)\n"
             "- Key notes (scope, dependencies, work plan, AVA/Client third parties)\n\n"
-            "Use o seguinte exemplo como referência de estrutura e estilo da tabela:\n\n"
+            "Use o seguinte exemplo como referência de estrutura, tipo de conteudo gerado e estilo da tabela:\n\n"
             "| Track / Workstream                        | Client | Avanade | Key notes (scope, dependencies, work plan, AVA/Client third parties) |\n"
             "|-------------------------------------------|--------|---------|------------------------------------------------------------------------|\n"
             "| Project Kickoff & Alignment               |   X    |    X    | Define project goals, objectives, expectations, and working model.     |\n"
@@ -234,7 +234,23 @@ async def generate_section(request: PromptRequest):
             "| Security & Compliance Review              |   X    |    X    | Ensure GenAI usage complies with client’s internal governance, data privacy, and legal requirements. |\n"
             "| Use Case Implementation (PoC/MVP)         |        |    X    | Deliver prioritized use cases with agile cycles and value demonstration checkpoints. |\n"
             "| Knowledge Transfer & Sustainability Plan  |   X    |    X    | Empower client teams to maintain, scale, and govern AI solutions independently over time. |\n\n"
-            "A tabela gerada deve ser nova a cada requisição, limpando layout anterior.\n"
+            "A tabela gerada deve ser nova a cada requisição, limpando layout anterior. Gere uma tabela HTML com o máximo de conteúdo possível, de preferencia com minimo de 10 linhas geradas de conteudo na tabela,\n"
+            "A resposta deve estar formatada em HTML usando <table>, <thead>, <tbody>, <tr>, <th> e <td>. Não inclua explicações fora da tabela."
+        ),
+        "Opportunity Background - Win Themes": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie uma tabela para a seção 'Opportunity Background - Win Themes', gere uma tabela HTML com duas colunas:\n"
+            "- Theme\n"
+            "- Evidence\n\n"
+            "Use o seguinte exemplo como referência de estrutura, tipo de conteudo gerado e estilo da tabela:\n\n"
+            "| Theme                          | Evidence                                                                 |\n"
+            "|--------------------------------|--------------------------------------------------------------------------|\n"
+            "| Expertise in Generative AI     | Successfully delivered similar Generative AI projects for major clients. |\n"
+            "| Scalable AI Platform           | Proven architecture supporting multi-model AI deployments on Azure.      |\n"
+            "| Accelerated Time-to-Value      | Use of pre-built AI accelerators and reusable assets enabled faster deployment of use cases. |\n"
+            "| Governance & Responsible AI    | Established frameworks for ethical AI, privacy compliance, and lifecycle monitoring. |\n"
+            "| Client Empowerment & Sustainability | AI Literacy programs and CoE models delivered to enable client autonomy and scale. |\n\n"
+            "A tabela gerada deve ser nova a cada requisição, limpando layout anterior. gere uma tabela HTML com o máximo de conteúdo possível, de preferencia com minimo de 5 linhas gerados de conteudo na tabela,\n"
             "A resposta deve estar formatada em HTML usando <table>, <thead>, <tbody>, <tr>, <th> e <td>. Não inclua explicações fora da tabela."
         ),
  }
