@@ -141,7 +141,7 @@ async def generate_all_sections(request: BriefingRequest):
 @app.post("/generate-section")
 async def generate_section(request: PromptRequest):
     section_prompts = {
-            "Client Stated Needs": (
+        "Client Stated Needs": (
             "Você é um assistente de IA especializado em propostas comerciais.\n"
             f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção '{request.section}'.\n"
             " Esse texto deve serfeito baseado nesse briefing fazendo levantamento das Necessidades declaradas pelo cliente"
@@ -206,7 +206,17 @@ async def generate_section(request: PromptRequest):
             "Plataforma de baixo código para personalização e testes rápidos de casos de uso de IA."
             "Sugira componentes de solução que atendam ao briefing do cliente. "
             "Responda em até 3 tópicos objetivos, estruturados e claros, em HTML (use <ul><li>)."
-        )
+        ),
+        "Solution-to-Win (cost optimization)": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Solution-to-Win (cost optimization)'.\n"
+            "Liste 3 bullets objetivos e claros sobre otimização de custos, focando em uso de serviços Azure, arquitetura modular e aceleradores de IA para redução de tempo e esforço. Responda em HTML (use <ul><li>)."
+        ),
+        "Price-to-Win": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Price-to-Win'.\n"
+            "Liste 3 bullets objetivos e claros sobre estratégias de preço para vencer, como modelo Time & Materials, escopo focado e modelo pay-per-service. Responda em HTML (use <ul><li>)."
+        ),
     }
 
     prompt = (
