@@ -13,7 +13,8 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins= ["*"],  # coloque exatamente a origem que está acessando o backend
+   # allow_origins= ["*"],  # coloque exatamente a origem que está acessando o backend
+    allow_origins=["http://127.0.0.1:5500"],  # Adicione a origem do frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -71,7 +72,7 @@ async def generate_all_sections(request: BriefingRequest):
             "Você é um assistente de IA especializado em propostas comerciais.\n"
             f"Baseado no briefing geral: '''{request.briefing}''', crie um texto para a seção 'Key Issues and Problems'.\n"
             " Esse texto deve serfeito baseado nesse briefing fazendo levantamento dos Principais problemas e questões declarados pelo cliente"
-            "Para ajudar entender a estrutura do texto que deve xer criado, aqui um exemplo de 3 topicos criados para apresentar as problemas e questões declarados por um cliente aleatorio:"
+            "Para ajudar entender a estrutura do texto que deve xer criado, aqui um exemplo de 3 topicos criados para apresentar as problemas e questões declaradas por um cliente aleatorio:"
             "1. Falta de escalabilidade para lidar com grandes volumes de interações de IA."
             "2. Complexidades de integração entre sistemas e modelos de IA."
             "3. Flexibilidade limitada na personalização de soluções de IA para necessidades comerciais específicas."
@@ -167,7 +168,7 @@ async def generate_section(request: PromptRequest):
             "Você é um assistente de IA especializado em propostas comerciais.\n"
             f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção '{request.section}'.\n"
             " Esse texto deve serfeito baseado nesse briefing fazendo levantamento dos Principais problemas e questões declarados pelo cliente"
-            "Para ajudar entender a estrutura do texto que deve xer criado, aqui um exemplo de 3 topicos criados para apresentar as problemas e questões declarados por um cliente aleatorio:"
+            "Para ajudar entender a estrutura do texto que deve xer criado, aqui um exemplo de 3 topicos criados para apresentar as problemas e questões declaradas por um cliente aleatorio:"
             "1. Falta de escalabilidade para lidar com grandes volumes de interações de IA."
             "2. Complexidades de integração entre sistemas e modelos de IA."
             "3. Flexibilidade limitada na personalização de soluções de IA para necessidades comerciais específicas."
@@ -253,6 +254,190 @@ async def generate_section(request: PromptRequest):
             "A tabela gerada deve ser nova a cada requisição, limpando layout anterior. gere uma tabela HTML com o máximo de conteúdo possível, de preferencia com minimo de 5 linhas gerados de conteudo na tabela,\n"
             "A resposta deve estar formatada em HTML usando <table>, <thead>, <tbody>, <tr>, <th> e <td>. Não inclua explicações fora da tabela."
         ),
+        "Escopo do Trabalho": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Escopo do Trabalho'.\n"
+            "Exemplo:\n"
+            "Este projeto inclui a implementação de um acelerador GenAI para apoiar o desenvolvimento de casos de uso priorizados em duas áreas de negócios. "
+            "O escopo também envolve a formação de uma equipe dedicada, a realização de sessões de Alfabetização em IA e o estabelecimento de uma estrutura de governança (CoE GenAI).\n"
+            "Responda em HTML (use <p>)."
+        ),
+        "Principais Resultados": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Principais Resultados'.\n"
+            "Exemplo:\n"
+            "As entregas incluem protótipos funcionais (PoCs/MVPs), um backlog reutilizável de casos de uso, materiais de capacitação de IA e um modelo de governança de base para garantir a adoção responsável e escalável do GenAI dentro da organização.\n"
+            "Responda em HTML (use <p>)."
+        ),
+        "Fora do Escopo": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Fora do Escopo'.\n"
+            "Exemplo:\n"
+            "Atividades relacionadas à implantação de produção em larga escala, integração em toda a empresa, engenharia avançada de dados e treinamento de modelos personalizados não estão incluídas nesta fase.\n"
+            "Responda em HTML (use <p>)."
+        ),
+         "Abordagem de Entrega": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Abordagem de Entrega'.\n"
+            "Exemplo:\n"
+            "A entrega seguirá um modelo ágil, baseado em sprints, centrado na cocriação e no feedback contínuo. "
+            "Cada iteração entregará ativos funcionais alinhados aos casos de uso priorizados, permitindo validação rápida e engajamento do negócio.\n"
+            "Responda em HTML (use <p>)."
+        ),
+        "Estratégia de Sourcing": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Estratégia de Sourcing'.\n"
+            "Exemplo:\n"
+            "Os recursos serão obtidos do pool de talentos especializados em GenAI da Avanade, garantindo acesso a engenheiros de IA, arquitetos de soluções e analistas de negócios. "
+            "Uma combinação flexível de profissionais locais e locais será usada para equilibrar custo, expertise e colaboração.\n"
+            "Responda em HTML (use <p>)."
+        ),
+        "Mobilização": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Mobilização'.\n"
+            "Exemplo:\n"
+            "O projeto utilizará a infraestrutura e as ferramentas existentes do cliente, garantindo tempo mínimo de configuração. "
+            "Dado o modelo de execução baseado em capacidade, os membros da equipe serão alocados dinamicamente para atender às demandas do projeto. "
+            "A mobilização será estruturada para garantir integração eficiente, colaboração contínua e adaptabilidade às necessidades em evolução.\n"
+            "Responda em HTML (use <p>)."
+        ),
+        "Work Products & Deliverables": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie uma tabela para a seção 'Work Products & Deliverables'.\n"
+            "Gere uma tabela HTML com as seguintes colunas:\n"
+            "- Título\n"
+            "- Descrição\n"
+            "- Formato\n"
+            "- Critérios de Aceitação\n"
+            "- Tipo\n\n"
+            "Certifique-se de que a tabela tenha exatamente 5 linhas, cada uma representando um tipo: Funcional, Técnico, Capacitação, Gerencial e Estratégico.\n"
+            "Certifique-se de que cada linha da tabela tenha conteúdo único e relevante em todas as colunas: Título, Descrição, Formato, Critérios de Aceitação e Tipo.\n"
+            "Não inclua conteúdo concatenado ou mal formatado em uma única célula.\n"
+            "Cada linha deve conter conteúdo único e relevante, baseado no briefing geral fornecido. Não inclua linhas genéricas ou exemplos padrão.\n"
+            "Use o seguinte exemplo como referência:\n\n"
+            "| Título                          | Descrição                                                                 | Formato                | Critérios de Aceitação                                                | Tipo         |\n"
+            "|---------------------------------|---------------------------------------------------------------------------|------------------------|------------------------------------------------------------------------|--------------|\n"
+            "| Protótipos de Casos de Uso GenAI| PoCs/MVPs funcionais alinhados aos problemas de negócios priorizados.     | Demos Interativos      | Validados pelos usuários de negócios e atendem aos critérios de sucesso definidos. | Funcional    |\n"
+            "| Onboarding do Acelerador GenAI  | Implantação e configuração inicial dos aceleradores GenAI da Avanade.     | Configuração & Scripts | Implantados com sucesso e prontos para uso pela equipe.               | Técnico      |\n"
+            "| Pacote de Capacitação em IA     | Sessões de treinamento, materiais e ativos para engajamento da equipe interna. | Apresentações & Kits  | Entregues ao público-alvo e confirmada a participação/feedback.       | Capacitação  |\n"
+            "| Playbook CoE GenAI              | Guia de governança com templates, papéis, melhores práticas e KPIs.       | Documentação           | Revisado e aceito pelos stakeholders de governança de IA.             | Gerencial    |\n"
+            "| Backlog & Framework de Priorização | Backlog de casos de uso GenAI curado e categorizado para 2 áreas de negócios. | Lista Priorizada      | Aprovado conjuntamente pelo product owner e pela equipe de entrega.   | Estratégico  |\n\n"
+            "A tabela gerada deve estar formatada em HTML usando <table>, <thead>, <tbody>, <tr>, <th> e <td>. Não inclua explicações fora da tabela."
+        ),
+        "Processo de Aceitação de Entregas": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie um texto para a seção 'Processo de Aceitação de Entregas'.\n"
+            "Descreva o processo de aceitação de entregas, incluindo critérios de validação, etapas de aprovação e responsabilidades das partes envolvidas.\n"
+            "Exemplo:\n"
+            "Todas as entregas seguirão um processo de aceitação estruturado, definido em conjunto pela Avanade e pela ConectCar. Isso inclui:\n"
+            "- Validação de protótipos funcionais (PoCs/MVPs) pelas partes interessadas do negócio.\n"
+            "- Aprovação de materiais de treinamento e governança pelas equipes designadas.\n"
+            "- Alinhamento com o backlog definido.\n"
+            "Cada entrega será revisada quanto à aderência ao escopo, funcionalidade técnica (quando aplicável) e resultados de negócio esperados. A aprovação formal será documentada por meio de relatórios resumidos ou formulários de aprovação.\n"
+            "Responda em HTML (use <p>)."
+        ),
+        "Principais Dependências/Obrigações Externas": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie uma tabela para a seção 'Principais Dependências/Obrigações Externas'.\n"
+            "Gere uma tabela HTML com as seguintes colunas:\n"
+            "- Dependência\n"
+            "- Impacto\n"
+            "- Quando\n"
+            "- Obrigação com\n"
+            "- Comentários\n\n"
+            "Certifique-se de que a tabela tenha exatamente 6 linhas, cada uma representando uma dependência única e relevante.\n"
+            "Cada linha deve conter conteúdo único e relevante em todas as colunas: Dependência, Impacto, Quando, Obrigação com e Comentários.\n"
+            "Não inclua conteúdo genérico ou mal formatado em uma única célula.\n"
+            "Use o seguinte exemplo como referência:\n\n"
+            "| Dependência                        | Impacto                                      | Quando       | Obrigação com         | Comentários                                    |\n"
+            "|------------------------------------|---------------------------------------------|--------------|-----------------------|-----------------------------------------------|\n"
+            "| Acesso a Dados e APIs do Cliente   | Atrasos na integração e contextualização do modelo de IA. | Início do Projeto | Equipe de TI do Cliente | Requer provisionamento e testes antecipados. |\n"
+            "| Agendamento de Stakeholders        | Atrasos na validação de PoC e feedback dos usuários. | Sprint 1     | Líderes de Negócio    | Necessário para demonstrações e revisão de critérios de sucesso. |\n"
+            "| Identificação de Participantes de Alfabetização em IA | Adiamento de sessões de treinamento. | Semana 1     | Equipe de RH/Treinamento | Necessário alinhamento de calendário e número mínimo de participantes. |\n"
+            "| Nomeação de Product Owner para Casos de Uso | Atrasos na tomada de decisão e grooming do backlog. | Início do Projeto | PMO do Cliente         | Habilita planejamento e priorização eficazes. |\n"
+            "| Participantes de Revisão de Governança | Atrasos na validação do framework de CoE. | Meio do Projeto | Líder de Conformidade | Necessário para playbook de governança e política. |\n"
+            "| Provisionamento de Ambiente (Sandbox/Dev) | Atrasos na implantação de componentes técnicos de PoC. | Sprint 1     | Infraestrutura do Cliente | Deve atender aos requisitos mínimos de recursos Azure. |\n\n"
+            "A tabela gerada deve estar formatada em HTML usando <table>, <thead>, <tbody>, <tr>, <th> e <td>. Não inclua explicações fora da tabela."
+        ),
+        "Riscos Chaves": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie uma tabela para a seção 'Riscos Chaves'.\n"
+            "Gere uma tabela HTML com as seguintes colunas:\n"
+            "- #\n"
+            "- Risk\n"
+            "- Consequence\n"
+            "- Mitigation Action(s) & Date\n"
+            "- Impact\n"
+            "- Probability\n"
+            "- Owner\n"
+            "- Comments\n\n"
+            "Certifique-se de que a tabela tenha exatamente 5 linhas, cada uma representando um risco único e relevante.\n"
+            "Cada linha deve conter conteúdo único e relevante em todas as colunas: Risk, Consequence, Mitigation Action(s) & Date, Impact, Probability, Owner e Comments.\n"
+            "Não inclua conteúdo genérico ou mal formatado em uma única célula.\n"
+            "Use o seguinte exemplo como referência:\n\n"
+            "| # | Risk                                | Consequence                     | Mitigation Action(s) & Date       | Impact | Probability | Owner                 | Comments                                   |\n"
+            "|---|-------------------------------------|----------------------------------|------------------------------------|--------|-------------|-----------------------|-------------------------------------------|\n"
+            "| 1 | Delay in receiving business data & APIs | Slower integration and testing | Early engagement with client IT team | H      | M           | Delivery Manager      | API access must be prioritized for smooth progress |\n"
+            "| 2 | Low availability of business stakeholders | Delayed feedback and slower backlog refinement | Align calendars during project kickoff | M      | H           | Client Sponsor        | Business team allocation must be secured early |\n"
+            "| 3 | Misalignment on AI use case expectations | Rework and scope changes       | Joint backlog review sessions before development | H      | M           | Product Owner         | Clarity on success metrics is key for each use case |\n"
+            "| 4 | Lack of engagement in AI Literacy sessions | Low adoption and resistance to change | Incentivize participation and link to strategic goals | M      | M           | HR / Enablement Lead | Internal communication campaign may be required |\n"
+            "| 5 | Delays in provisioning dev/test environments | Blocked implementation of PoCs | Request provisioning in Sprint 0 | H      | M           | Client IT Infrastructure | Ensure environments meet min. Azure GenAI requirements |\n\n"
+            "A tabela gerada deve estar formatada em HTML usando <table>, <thead>, <tbody>, <tr>, <th> e <td>. Não inclua explicações fora da tabela."
+        ),
+        "Key Assumptions": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie uma tabela para a seção 'Key Assumptions'.\n"
+            "Gere uma tabela HTML com as seguintes colunas:\n"
+            "- Assumption\n"
+            "- Verification\n"
+            "- Impact\n"
+            "- Owner\n"
+            "- Comments\n\n"
+            "Certifique-se de que a tabela tenha exatamente 8 linhas, cada uma representando uma suposição única e relevante.\n"
+            "Cada linha deve conter conteúdo único e relevante em todas as colunas: Assumption, Verification, Impact, Owner e Comments.\n"
+            "Não inclua conteúdo genérico ou mal formatado em uma única célula. GERE todo CONTEúDO em português e traduza as colunas tbm para português\n"
+            "Use o seguinte exemplo como referência:\n\n"
+            "| Assumption                          | Verification                          | Impact | Owner                 | Comments                                   |\n"
+            "|-------------------------------------|---------------------------------------|--------|-----------------------|-------------------------------------------|\n"
+            "| Client will provide business rules documentation continuously. | Confirm during backlog refinement sessions. | High   | Client                | Business rules may evolve, impacting backlog. |\n"
+            "| Key business stakeholders will be available for review cycles. | Confirm stakeholder attendance in sprint demos. | High   | Client PMO            | Engagement is critical to validate use cases and priorities. |\n"
+            "| Client will designate Product Owner(s) for use case alignment. | Validate during project kickoff. | High   | Client                | Lack of ownership may delay decisions. |\n"
+            "| Azure subscription and environments will be provisioned in advance. | Validate before Sprint 1 start. | Medium | Client IT             | Required for GenAI accelerator deployment. |\n"
+            "| GenAI use cases will not require external model training. | Confirm during use case qualification. | Medium | Avanade & Client      | Project focuses on prompt-based and accelerator-based use. |\n"
+            "| Data shared will not contain sensitive PII unless explicitly agreed. | Review during data onboarding. | High   | Client Security Team  | Ensures compliance with data privacy standards. |\n"
+            "| Training participants will be pre-selected and available as planned. | Check participant list before each session. | Medium | Client Enablement Lead | AI Literacy depends on consistent participation. |\n"
+            "| Governance team will review and validate CoE artifacts. | Approval checkpoints during CoE track. | Medium | Client Governance Lead | Needed to establish AI operating model and sustainment. |\n\n"
+            "A tabela gerada deve estar formatada em HTML usando <table>, <thead>, <tbody>, <tr>, <th> e <td>. Não inclua explicações fora da tabela."
+        ),
+        "Funções e Responsabilidades - Solution RACI": (
+            "Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie uma tabela para a seção 'Funções e Responsabilidades - Solution RACI'.\n"
+            "Gere uma tabela HTML com as seguintes colunas:\n"
+            "- Atividade/Tarefa\n"
+            "- Cliente\n"
+            "- Avanade Onshore\n\n"
+            "Certifique-se de que a tabela tenha exatamente 10 linhas, cada uma representando uma atividade ou tarefa única e relevante.\n"
+            "Cada linha deve conter conteúdo único e relevante em todas as colunas: Atividade/Tarefa, Cliente e Avanade Onshore.\n"
+            "Use os seguintes valores para Cliente e Avanade Onshore:\n"
+            "- R: Responsável\n"
+            "- A: Aprovador\n"
+            "- C: Consultado\n"
+            "- I: Informado\n\n"
+            "Use o seguinte exemplo como referência:\n\n"
+            "| Atividade/Tarefa                     | Cliente | Avanade Onshore |\n"
+            "|--------------------------------------|---------|-----------------|\n"
+            "| Alinhamento Estratégico e Kickoff    | A       | R               |\n"
+            "| Sessões de Alfabetização em IA       | R       | A               |\n"
+            "| Brainstorming e Priorização de Casos | R       | A               |\n"
+            "| Definição de Casos Piloto            | C       | R               |\n"
+            "| Configuração da Plataforma GenAI     | I       | R               |\n"
+            "| Workshop Prático para Estruturação   | R       | A               |\n"
+            "| Desenvolvimento de MVP/Piloto        | I       | R               |\n"
+            "| Validação de Casos e Feedback        | A       | R               |\n"
+            "| Configuração de Governança e CoE     | C       | R               |\n"
+            "| Transferência de Conhecimento        | I       | R               |\n\n"
+            "A tabela gerada deve estar formatada em HTML usando <table>, <thead>, <tbody>, <tr>, <th> e <td>. Não inclua explicações fora da tabela."
+        )
  }
 
     prompt = (
@@ -271,7 +456,12 @@ async def generate_section(request: PromptRequest):
     )
 
     raw_text = response.choices[0].message["content"].strip()
-    refined_text = clean_code_blocks(raw_text)
+    # Valida e preenche lacunas apenas para a seção "Work Products & Deliverables"
+    if request.section == "Work Products & Deliverables":
+        refined_text = validate_table_output(raw_text, request)
+    else:
+        refined_text = clean_code_blocks(raw_text)
+
     return {
         "refined_text": refined_text,
         "prompt": prompt
@@ -335,6 +525,56 @@ def clean_code_blocks(text):
     text = re.sub(r"^```html\s*", "", text.strip(), flags=re.IGNORECASE | re.MULTILINE)
     text = re.sub(r"^```|```$", "", text.strip(), flags=re.MULTILINE)
     return text.strip()
+
+def validate_table_output(html_table: str, request: PromptRequest) -> str:
+    # Tipos esperados na tabela
+    required_types = ["Funcional", "Técnico", "Capacitação", "Gerencial", "Estratégico"]
+    missing_types = [tipo for tipo in required_types if tipo not in html_table]
+
+    # Divide a tabela em linhas e verifica cada linha
+    rows = html_table.split("\n")
+    corrected_rows = []
+
+    for row in rows:
+        columns = row.split("|")
+        if len(columns) == 6:
+            # Verifica se todas as colunas estão preenchidas
+            corrected_row = "|".join([col.strip() for col in columns])
+            corrected_rows.append(corrected_row)
+        elif len(columns) > 6:
+            # Corrige linhas com excesso de conteúdo concatenado
+            corrected_row = "|".join([col.strip() for col in columns[:6]])
+            corrected_rows.append(corrected_row)
+        else:
+            # Reexecuta o prompt para corrigir linhas incompletas
+            corrected_row = "|".join(columns + [""] * (6 - len(columns)))  # Preenche colunas vazias
+            corrected_rows.append(corrected_row)
+
+    # Reexecuta o prompt se houver tipos faltantes ou linhas incompletas
+    if missing_types or len(corrected_rows) < 5:
+        prompt = (
+            f"Você é um assistente de IA especializado em propostas comerciais.\n"
+            f"Baseado no briefing geral: '''{request.content}''', crie linhas adicionais para corrigir os seguintes problemas:\n"
+            f"- Tipos faltantes: {', '.join(missing_types)}.\n"
+            f"- Total de linhas insuficiente: {5 - len(corrected_rows)} linhas adicionais necessárias.\n"
+            "Cada linha deve conter conteúdo único e relevante, baseado no briefing fornecido.\n"
+            "Use o seguinte formato:\n\n"
+            "| Título                          | Descrição                                                                 | Formato                | Critérios de Aceitação                                                | Tipo         |\n"
+            "|---------------------------------|---------------------------------------------------------------------------|------------------------|------------------------------------------------------------------------|--------------|\n"
+        )
+        response = openai.ChatCompletion.create(
+            engine="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7,
+            max_tokens=300,
+            top_p=1.0
+        )
+        additional_rows = response.choices[0].message["content"].strip()
+        corrected_rows += additional_rows.split("\n")
+
+    # Reconstrói a tabela corrigida
+    html_table = "\n".join(corrected_rows)
+    return html_table
 
 if __name__ == "__main__":
     import uvicorn

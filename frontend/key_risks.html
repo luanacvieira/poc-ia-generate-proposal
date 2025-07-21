@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riscos Chaves</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 300px;
+            background: #2c2c32;
+            color: #d0d0d0;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .sidebar h2 {
+            color: #0078d4;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .agent-message {
+            background: #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            position: relative;
+        }
+        .agent-message::before {
+            content: '🤖';
+            position: absolute;
+            left: -25px;
+            top: 5px;
+            font-size: 1.2em;
+        }
+        .input-area {
+            flex-grow: 1;
+            padding: 20px;
+            background: #fff;
+            overflow-y: auto;
+        }
+        .input-area h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+        button {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #005bb5;
+        }
+        .table-container {
+            margin-top: 20px;
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        th {
+            background: #0078d4;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f4f4f4;
+        }
+        tr:nth-child(odd) {
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>AI Agent Chat</h2>
+        <div class="agent-message" id="message-0">Olá! Por favor, forneça o título da proposta.</div>
+    </div>
+    <div class="input-area">
+        <h3>Key Risks <br /><br /> Insira os Dados da Proposta</h3>
+        <form id="briefing-form">
+            <textarea id="briefing" name="briefing" rows="6" placeholder="Digite o briefing geral da proposta..." required></textarea>
+            <button type="submit">Enviar para o Agente</button>
+        </form>
+        <div id="table-container" class="table-container">
+            <h4>Tabela Gerada</h4>
+            <div id="generated-table">
+                <!-- A tabela gerada será inserida aqui -->
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('briefing-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const briefing = document.getElementById('briefing').value;
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/generate-section', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ section: "Riscos Chaves", content: briefing })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('generated-table').innerHTML = data.refined_text;
+                } else {
+                    alert('Erro ao gerar a tabela. Verifique o backend.');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao conectar ao backend.');
+            }
+        });
+    </script>
+</body>
+</html>
